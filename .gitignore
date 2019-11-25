@@ -1,0 +1,9 @@
+# Visual Studio Code
+.vscode/
+
+# Execution artifacts
+arborlife/__pycache__/
+tests/__pycache__/
+
+# Setup artifacts
+arborlife.egg-info/
