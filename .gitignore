@@ -7,3 +7,6 @@ tests/__pycache__/
 
 # Setup artifacts
 arborlife.egg-info/
+
+# Legacy C# reference code
+legacy/
