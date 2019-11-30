@@ -6,7 +6,7 @@ from arborlife.soil import Soil
 
 def test_default_init():
     s = Soil()
-    assert s.moisture_ft3 == Soil.DEF_MAX_MOISTURE_FT3
+    assert s.moisture_ft3 == Soil.MAX_MOISTURE_FT3
     assert isinstance(s.moisture_ft3, mp.mpf)
 
 
@@ -16,8 +16,8 @@ def test_specified_init_bad():
 
 
 def test_specified_init_good():
-    s = Soil(Soil.DEF_MAX_MOISTURE_FT3 / 2)
-    assert s.moisture_ft3 == Soil.DEF_MAX_MOISTURE_FT3 / 2
+    s = Soil(Soil.MAX_MOISTURE_FT3 / 2)
+    assert s.moisture_ft3 == Soil.MAX_MOISTURE_FT3 / 2
     assert isinstance(s.moisture_ft3, mp.mpf)
 
 
@@ -29,7 +29,7 @@ def test_moisture_overflow():
 
 def test_moisture_underflow():
     s = Soil()
-    with pytest.raises(ValueError) as _:
+    with pytest.raises(TypeError) as _:
         s.moisture_ft3 = -1
 
 
@@ -41,13 +41,13 @@ def test_sm_overflow():
 
 def test_sm_underflow():
     s = Soil()
-    with pytest.raises(ValueError) as _:
+    with pytest.raises(TypeError) as _:
         s.soil_moisture = -1
 
 
 @pytest.mark.parametrize(
     "moisture_pct,soil_moisture",
-    [(1.0, 10), (0.5, 5), (0, 0)]
+    [(mp.mpf('1.0'), mp.mpf('10')), (mp.mpf('0.5'), mp.mpf('5')), (mp.mpf('0'), mp.mpf('0'))]
 )
 def test_sm_from_moisture(moisture_pct, soil_moisture):
     s = Soil()
@@ -57,8 +57,9 @@ def test_sm_from_moisture(moisture_pct, soil_moisture):
 
 @pytest.mark.parametrize(
     "soil_moisture,moisture_pct",
-    [(10, 1.0), (5.5, 0.55), (0, 0)]
+    [(mp.mpf('10'), mp.mpf('1.0')), (mp.mpf('5.5'), mp.mpf('0.55')), (mp.mpf('0'), mp.mpf('0'))]
 )
+
 def test_moisture_from_sm(soil_moisture, moisture_pct):
     s = Soil()
     s.soil_moisture = soil_moisture
