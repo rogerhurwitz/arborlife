@@ -1,59 +1,58 @@
-from decimal import Decimal  # noqa: F401
+import mpmath as mp
 
 
 class Soil:
-    """Soil takes in and gives out resources within its capacity limits.
+    """Soil takes in and gives out moisture within its capacity limits."""
 
-    Constants:
-        FC_MOISTURE_FT3 -- Represents the maximum number of molecules of water
-            per cubic foot that soil can hold assuming maximum field_capacity.
+    # Ensures decimal precision of mpmath sufficient for all uses
+    mp.mp.dps = 30
 
-    Attributes:
-        field_capacity -- A dimensionless number between 0 and 10 representing
-            the most saturated the soil can be (10 = 100%).  Defaults to 10.
-        moisture -- Current amount of soil moisture.  Must be between 0 and
-            maximum capacity defined as field_capacity / 10 * FC_MOISTURE_FT3
-        moisture_gauge -- A read-only value between 0 and 10 representing the
-            the ratio of current moisture to moisture capacity:
-            moisture_gauge = field_capacity * (moisture / FC_MOISTURE_FT3)
-    """
+    # mpf is decimal-accurate floating point used by mpmath
+    MAX_MOISTURE_FT3 = mp.mpf("1.18") * mp.mpf("10e26")
 
-    FC_MOISTURE_FT3 = 1.18 * 10e26
-    MIN_FC, MAX_FC = 0, 10
+    FC = 10
 
-    # TODO: Close w/ Neil on whether we need enhanced precision/accuracy
-    # FC_MOISTURE_FT3 = Decimal("1.18") * Decimal("10e26")
+    def __init__(self, max_moisture_ft3=MAX_MOISTURE_FT3):
 
-    def __init__(self, field_capacity=MAX_FC):
+        if not isinstance(max_moisture_ft3, mp.mpf):
+            raise TypeError("max_moisture_ft3 must be an mpmath.dpf")
 
-        if field_capacity < Soil.MIN_FC or field_capacity > Soil.MAX_FC:
-            raise ValueError(f"field_capacity must be between {Soil.MIN_FC}"
-                             f" and {Soil.MAX_FC}.")
-
-        self._field_capacity = field_capacity
-
-        # TODO: Close w/ Neil on allowing specified moisture initialization
-        self._moisture = field_capacity / Soil.MAX_FC * Soil.FC_MOISTURE_FT3
+        self._max_moisture_ft3 = max_moisture_ft3
+        self._moisture_ft3 = max_moisture_ft3
 
     @property
-    def field_capacity(self):
-        return self._field_capacity
+    def soil_moisture(self):
+        """Degree of moisture in soil on a 0-10 scale (mpmath.mpf)"""
+
+        # soil_moisture calculated from moisture_ft3 to avoid synchronization
+        return Soil.FC * (self._moisture_ft3 / self._max_moisture_ft3)
+
+    @soil_moisture.setter
+    def soil_moisture(self, value):
+
+        if not isinstance(value, mp.mpf):
+            raise TypeError("soil_moisture must be an mpmath.mpf")
+
+        if value > Soil.FC or value < 0:
+            raise ValueError(f"soil_moisture must be between 0 and {Soil.FC}")
+
+        # Changes moisture_ft3 - soil_moisture is always calculated
+        self._moisture_ft3 = value * self._max_moisture_ft3 / Soil.FC
 
     @property
-    def moisture_gauge(self):
-        return self._field_capacity * (self._moisture / Soil.FC_MOISTURE_FT3)
+    def moisture_ft3(self):
+        """Current water level as molecules per cubic foot (mpmath.mpf)"""
+        return self._moisture_ft3
 
-    @property
-    def moisture(self):
-        return self._moisture
+    @moisture_ft3.setter
+    def moisture_ft3(self, value):
 
-    @moisture.setter
-    def moisture(self, value):
-        max_moisture = (self._field_capacity / Soil.MAX_FC *
-                        Soil.FC_MOISTURE_FT3)
+        if not isinstance(value, mp.mpf):
+            raise TypeError("moisture_ft3 must be an mpmath.dpf")
 
-        if value > max_moisture or value < 0:
-            raise ValueError(f"Attempt to set moisture below 0 or above"
-                             f" {max_moisture}.")
+        if value > self._max_moisture_ft3 or value < 0:
+            raise ValueError(
+                f"moisture_ft3 must be between 0 and {self._max_moisture_ft3}"
+            )
 
-        self._moisture = value
+        self._moisture_ft3 = mp.mpf(value)

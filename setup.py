@@ -7,6 +7,9 @@ setup(
     url="https://github.com/rogerhurwitz/arborlife",
     author="Roger Hurwitz",
     author_email="rogerhurwitz@gmail.com",
+    install_requires=[
+        "mpmath"
+    ],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: MIT License",
