@@ -15,45 +15,50 @@ class Soil:
 
     def __init__(self, max_moisture_ft3=MAX_MOISTURE_FT3):
 
+        # Convert specified value into an mpf if possible
         if not isinstance(max_moisture_ft3, mp.mpf):
-            raise TypeError("max_moisture_ft3 must be an mpmath.dpf")
+            max_moisture_ft3 = mp.mpf(max_moisture_ft3)
 
         self._max_moisture_ft3 = max_moisture_ft3
+
+        # Available moisture is assumed to be at maximum initially
         self._moisture_ft3 = max_moisture_ft3
 
     @property
     def soil_moisture(self):
-        """float: Available moisture in soil between 0 and 10 scale"""
+        """mpf: Available moisture in soil on a scale between 0.0 and 10.0"""
 
-        # soil_moisture calculated from moisture_ft3 to avoid synchronization
+        # Calculated from moisture_ft3 to avoid synchronization overhead
         return Soil.FIELD_CAPACITY * (self._moisture_ft3 / self._max_moisture_ft3)          # noqa: E501
 
     @soil_moisture.setter
-    def soil_moisture(self, value):
+    def soil_moisture(self, new_sm):
 
-        if not isinstance(value, mp.mpf):
-            raise TypeError("soil_moisture must be an mpmath.mpf")
+        # Convert specified value into an mpf if possible
+        if not isinstance(new_sm, mp.mpf):
+            new_sm = mp.mpf(new_sm)
 
-        if value > Soil.FIELD_CAPACITY or value < 0:
-            raise ValueError(f"soil_moisture must be between 0 and {Soil.FIELD_CAPACITY}")  # noqa: E501
+        # Clamp value between boundary values if out of range
+        if new_sm < 0 or new_sm > Soil.FIELD_CAPACITY:
+            new_sm = mp.mpf(max(0, min(new_sm, Soil.FIELD_CAPACITY)))
 
-        # Changes moisture_ft3 - soil_moisture is always calculated
-        self._moisture_ft3 = value * self._max_moisture_ft3 / Soil.FIELD_CAPACITY           # noqa: E501
+        # Changes _moisture_ft3 then used by soil_moisture property getter
+        self._moisture_ft3 = new_sm * self._max_moisture_ft3 / Soil.FIELD_CAPACITY           # noqa: E501
 
     @property
     def moisture_ft3(self):
-        """Current water level as molecules per cubic foot (mpmath.mpf)"""
+        """mpf: Current water level as molecules per cubic foot"""
         return self._moisture_ft3
 
     @moisture_ft3.setter
-    def moisture_ft3(self, value):
+    def moisture_ft3(self, new_m_ft3):
 
-        if not isinstance(value, mp.mpf):
-            raise TypeError("moisture_ft3 must be an mpmath.dpf")
+        # Convert specified value into an mpf if possible
+        if not isinstance(new_m_ft3, mp.mpf):
+            new_m_ft3 = mp.mpf(new_m_ft3)
 
-        if value > self._max_moisture_ft3 or value < 0:
-            raise ValueError(
-                f"moisture_ft3 must be between 0 and {self._max_moisture_ft3}"
-            )
+        # Clamp value between boundary values if out of range
+        if new_m_ft3 > self._max_moisture_ft3 or new_m_ft3 < 0:
+            new_m_ft3 = mp.mpf(max(0, min(new_m_ft3, self._max_moisture_ft3)))
 
-        self._moisture_ft3 = mp.mpf(value)
+        self._moisture_ft3 = new_m_ft3
