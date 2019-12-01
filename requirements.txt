@@ -1,1 +1,0 @@
--e git+https://github.com/rogerhurwitz/arborlife@b97b2c5abca120a17107ee2f7fa9fc4aaebda752#egg=arborlife
