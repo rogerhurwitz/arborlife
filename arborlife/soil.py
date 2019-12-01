@@ -7,10 +7,11 @@ class Soil:
     # Ensures decimal precision of mpmath sufficient for all uses
     mp.mp.dps = 30
 
-    # mpf is decimal-accurate floating point used by mpmath
     MAX_MOISTURE_FT3 = mp.mpf("1.18") * mp.mpf("10e26")
+    """mpf: Default maximum moisture capacity of soil in molecules"""
 
-    FC = 10
+    FIELD_CAPACITY = 10
+    """int: Maximum moisture capacity of soil on a 0 to 10 scale"""
 
     def __init__(self, max_moisture_ft3=MAX_MOISTURE_FT3):
 
@@ -22,10 +23,10 @@ class Soil:
 
     @property
     def soil_moisture(self):
-        """Degree of moisture in soil on a 0-10 scale (mpmath.mpf)"""
+        """float: Available moisture in soil between 0 and 10 scale"""
 
         # soil_moisture calculated from moisture_ft3 to avoid synchronization
-        return Soil.FC * (self._moisture_ft3 / self._max_moisture_ft3)
+        return Soil.FIELD_CAPACITY * (self._moisture_ft3 / self._max_moisture_ft3)          # noqa: E501
 
     @soil_moisture.setter
     def soil_moisture(self, value):
@@ -33,11 +34,11 @@ class Soil:
         if not isinstance(value, mp.mpf):
             raise TypeError("soil_moisture must be an mpmath.mpf")
 
-        if value > Soil.FC or value < 0:
-            raise ValueError(f"soil_moisture must be between 0 and {Soil.FC}")
+        if value > Soil.FIELD_CAPACITY or value < 0:
+            raise ValueError(f"soil_moisture must be between 0 and {Soil.FIELD_CAPACITY}")  # noqa: E501
 
         # Changes moisture_ft3 - soil_moisture is always calculated
-        self._moisture_ft3 = value * self._max_moisture_ft3 / Soil.FC
+        self._moisture_ft3 = value * self._max_moisture_ft3 / Soil.FIELD_CAPACITY           # noqa: E501
 
     @property
     def moisture_ft3(self):
