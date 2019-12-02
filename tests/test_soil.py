@@ -47,7 +47,11 @@ def test_sm_underflow():
 
 @pytest.mark.parametrize(
     "moisture_pct,soil_moisture",
-    [(mp.mpf('1.0'), mp.mpf('10')), (mp.mpf('0.5'), mp.mpf('5')), (mp.mpf('0'), mp.mpf('0'))]
+    [
+        (mp.mpf("1.0"), mp.mpf("10")),
+        (mp.mpf("0.5"), mp.mpf("5")),
+        (mp.mpf("0"), mp.mpf("0")),
+    ],
 )
 def test_sm_from_moisture(moisture_pct, soil_moisture):
     s = Soil()
@@ -57,7 +61,11 @@ def test_sm_from_moisture(moisture_pct, soil_moisture):
 
 @pytest.mark.parametrize(
     "soil_moisture,moisture_pct",
-    [(mp.mpf('10'), mp.mpf('1.0')), (mp.mpf('5.5'), mp.mpf('0.55')), (mp.mpf('0'), mp.mpf('0'))]
+    [
+        (mp.mpf("10"), mp.mpf("1.0")),
+        (mp.mpf("5.5"), mp.mpf("0.55")),
+        (mp.mpf("0"), mp.mpf("0")),
+    ],
 )
 def test_moisture_from_sm(soil_moisture, moisture_pct):
     s = Soil()

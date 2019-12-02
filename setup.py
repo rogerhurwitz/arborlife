@@ -8,7 +8,13 @@ setup(
     author="Roger Hurwitz",
     author_email="rogerhurwitz@gmail.com",
     install_requires=[
-        "mpmath"
+        "mpmath",
+        "PyYAML",
+    ],
+    data_files=[
+        ("config", [
+            "tree.yaml",
+        ])
     ],
     classifiers=[
         "Development Status :: 3 - Alpha",
