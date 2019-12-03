@@ -8,14 +8,9 @@ setup(
     author="Roger Hurwitz",
     author_email="rogerhurwitz@gmail.com",
     install_requires=[
-        "mpmath",
-        "PyYAML",
+        "mpmath", "PyYAML", "numpy", "scipy",
     ],
-    data_files=[
-        ("config", [
-            "tree.yaml",
-        ])
-    ],
+    package_data={'arborlife': ['config/*.yml']},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "License :: OSI Approved :: MIT License",

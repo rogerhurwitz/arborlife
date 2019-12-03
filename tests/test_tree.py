@@ -2,19 +2,22 @@ import pytest
 import yaml
 
 from arborlife.tree import Tree
+from pkg_resources import resource_filename
 
 
 @pytest.fixture
-def cfgd():
-    with open("config/tree.yml") as ymlfile:
-        return yaml.safe_load(ymlfile)
+def tcfg():
+    ymlfilename = resource_filename("arborlife", "config/arborlife.yml")
+    with open(ymlfilename) as ymlfile:
+        return yaml.safe_load(ymlfile)["tree"]
 
 
-def test_default_init_good(cfgd):
-    t = Tree()
-    assert t.age == cfgd["starting_age"] and t.alive == cfgd["alive"]
+def test_init_age(tcfg):
+    tree_ages = [Tree().age for _ in range(1000)]
+    assert (
+        min(tree_ages) >= tcfg["age_init_min"]
+        and max(tree_ages) <= tcfg["age_init_max"])
 
 
-def test_specified_init_good():
-    t = Tree(starting_age=15, alive=False)
-    assert t.age == 15 and not t.alive
+def test_init_alive(tcfg):
+    assert Tree().alive == tcfg["alive"]
