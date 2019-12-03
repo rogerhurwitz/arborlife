@@ -2,7 +2,7 @@
 # Per object default settings for arborlife
 #
 tree:
-  # Set initial tree age within a truncated normal distribution
+  # To set starting tree age using a truncated normal distribution
   age_init_mean: 10
   age_init_std: 4
   age_init_min: 1
