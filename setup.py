@@ -8,7 +8,7 @@ setup(
     author="Roger Hurwitz",
     author_email="rogerhurwitz@gmail.com",
     install_requires=[
-        "mpmath", "PyYAML", "numpy", "scipy",
+        "PyYAML", "numpy", "scipy",
     ],
     package_data={'arborlife': ['config/*.yml']},
     classifiers=[
