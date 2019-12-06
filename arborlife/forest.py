@@ -25,10 +25,10 @@ class Forest:
         self._tiles = [
             al.Tile(x=x, y=y) for x in range(self.xdim) for y in range(self.ydim)
         ]
-        for tile in self.tiles:
-            if random() <= self.density:
+        for tile in self._tiles:
+            if random() <= self._density:
                 tile.tree = al.Tree()
-                self.trees.append(tile.tree)
+                self._trees.append(tile.tree)
 
     @property
     def xdim(self):
