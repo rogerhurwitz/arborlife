@@ -11,6 +11,10 @@ class Soil:
 
     def __init__(self, max_moisture_ft3=MAX_MOISTURE_FT3):
 
+        # Clamp max_moisture_ft3 between boundary values if out of range
+        if max_moisture_ft3 < 0 or max_moisture_ft3 > Soil.MAX_MOISTURE_FT3:
+            max_moisture_ft3 = max(0, min(max_moisture_ft3, Soil.MAX_MOISTURE_FT3))
+
         self._max_moisture_ft3 = max_moisture_ft3
 
         # Available moisture is assumed to be at maximum initially

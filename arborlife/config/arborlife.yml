@@ -1,6 +1,7 @@
 # 
 # Per object default settings for arborlife
 #
+
 tree:
   # To set starting tree age using a truncated normal distribution
   age_init_mean: 10
@@ -9,3 +10,10 @@ tree:
   age_init_max: 100
   # Whether a tree starts out as alive or dead
   alive: True
+
+forest:
+  # Extent of x and y dimensions of forest cell grid
+  xdim: 100
+  ydim: 100
+  # Initial percentage of cells in forest with trees
+  density_init: .60

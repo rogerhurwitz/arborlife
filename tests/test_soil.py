@@ -5,17 +5,21 @@ from arborlife.soil import Soil
 
 def test_default_init_good():
     s = Soil()
+    assert s._max_moisture_ft3 == Soil.MAX_MOISTURE_FT3
     assert s.moisture_ft3 == Soil.MAX_MOISTURE_FT3
 
 
-# def test_specified_init_bad():
-#     with pytest.raises(ValueError) as _:
-#         Soil("Hello, world.")
-
-
 def test_specified_init_good():
-    s = Soil(Soil.MAX_MOISTURE_FT3 / 2)
+    s = Soil(max_moisture_ft3=Soil.MAX_MOISTURE_FT3 / 2)
+    assert s._max_moisture_ft3 == Soil.MAX_MOISTURE_FT3 / 2
     assert s.moisture_ft3 == Soil.MAX_MOISTURE_FT3 / 2
+
+
+@pytest.mark.parametrize("mm_ft3,expected", [
+    (-1, 0), (Soil.MAX_MOISTURE_FT3 * 2, Soil.MAX_MOISTURE_FT3)])
+def test_specified_init_clamp(mm_ft3, expected):
+    s = Soil(max_moisture_ft3=mm_ft3)
+    assert s.moisture_ft3 == expected
 
 
 def test_moisture_overflow():
