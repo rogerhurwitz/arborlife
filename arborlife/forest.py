@@ -27,8 +27,8 @@ class Forest:
         ]
         for tile in self.tiles:
             if random() <= self.density:
-                tile.tree = (tree := al.Tree())  # noqa: E203, E231
-                self.trees.append(tree)
+                tile.tree = al.Tree()
+                self.trees.append(tile.tree)
 
     @property
     def xdim(self):
