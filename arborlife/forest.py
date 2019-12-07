@@ -11,8 +11,8 @@ class Forest:
         xdim(int): Read only extent of the forest along its x axis.
         ydim(int): Read only extent of the forest along its y axis
         density(float): Read only percentage of forest tiles w/ living trees.
-        trees(list): Read only list of the trees in the forest. Each tree is r/w
-        tiles(list): Read only list of the tiles in the forest. Each tile is r/w
+        tree_tiles(list): List of all tiles w/ trees in the forest.
+        tiles(list): List of all tiles in the forest.
     """
 
     def __init__(self):
@@ -20,8 +20,7 @@ class Forest:
         self._xdim = config.cfg["forest"]["xdim"]
         self._ydim = config.cfg["forest"]["ydim"]
         self._density = config.cfg["forest"]["density_init"]
-        # TODO: Change _trees to _tree_tiles, and update associated code
-        self._trees = []
+        self._tree_tiles = []
 
         self._tiles = [
             al.Tile(x=x, y=y) for x in range(self.xdim) for y in range(self.ydim)
@@ -30,7 +29,7 @@ class Forest:
         for tile in self._tiles:
             if random() <= self._density:
                 tile.tree = al.Tree()
-                self._trees.append(tile.tree)
+                self._tree_tiles.append(tile)
 
     @property
     def xdim(self):
@@ -42,11 +41,11 @@ class Forest:
 
     @property
     def density(self):
-        return sum(1 for tree in self.trees if tree.alive) / len(self.tiles)
+        return sum(1 for tile in self._tree_tiles if tile.tree.alive) / len(self._tiles)
 
     @property
-    def trees(self):
-        return self._trees
+    def tree_tiles(self):
+        return self._tree_tiles
 
     @property
     def tiles(self):

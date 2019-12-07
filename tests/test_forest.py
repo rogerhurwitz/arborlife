@@ -24,7 +24,8 @@ def test_default_init(forest, fcfg):
 
 
 def test_density(forest):
-    assert forest.density == len(forest.trees) / (forest.xdim * forest.ydim)
+    tree_count = sum(1 for tile in forest._tree_tiles if tile.tree.alive)
+    assert forest.density == tree_count / (forest.xdim * forest.ydim)
 
 
 def test_tiles(forest):
