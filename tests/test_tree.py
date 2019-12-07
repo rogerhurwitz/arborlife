@@ -5,7 +5,7 @@ from arborlife.tree import Tree
 from pkg_resources import resource_filename
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def tcfg():
     ymlfilename = resource_filename("arborlife", "config/arborlife.yml")
     with open(ymlfilename) as ymlfile:

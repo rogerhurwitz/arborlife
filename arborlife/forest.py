@@ -20,11 +20,13 @@ class Forest:
         self._xdim = config.cfg["forest"]["xdim"]
         self._ydim = config.cfg["forest"]["ydim"]
         self._density = config.cfg["forest"]["density_init"]
+        # TODO: Change _trees to _tree_tiles, and update associated code
         self._trees = []
 
         self._tiles = [
             al.Tile(x=x, y=y) for x in range(self.xdim) for y in range(self.ydim)
         ]
+        # Using specified initial tree density, populate forest with trees
         for tile in self._tiles:
             if random() <= self._density:
                 tile.tree = al.Tree()
