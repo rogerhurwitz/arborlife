@@ -1,3 +1,4 @@
+import math
 from random import random
 
 import arborlife as al
@@ -51,5 +52,26 @@ class Forest:
     def tiles(self):
         return self._tiles
 
-    def find_tile(self, x, y):
-        return self.tiles[x * self.xdim + y]
+    def find_tile_by_xy(self, x, y):
+        """Finds and returns the forest tile at the specified x/y location."""
+        return self._tiles[x * self._xdim + y]
+
+    def find_tiles_by_radius(self, center_tile, radius):
+        """Returns list of tiles within radius of center_tile including center_tile"""
+
+        # Specify a (clipped) bounding box big enough for area covered by radius
+        x_origin = max(center_tile.x - math.floor(radius), 0)
+        x_extent = min(center_tile.x + math.floor(radius) + 1, self._xdim)
+        y_origin = max(center_tile.y - math.floor(radius), 0)
+        y_extent = min(center_tile.y + math.floor(radius) + 1, self._ydim)
+
+        tiles_by_radius = []
+
+        # Iterate over bounding box collecting tiles w/in radius of center
+        for x in range(x_origin, x_extent):
+            for y in range(y_origin, y_extent):
+                test_tile = self.find_tile_by_xy(x, y)
+                if test_tile.find_distance(center_tile) <= radius:
+                    tiles_by_radius.append(test_tile)
+
+        return tiles_by_radius
