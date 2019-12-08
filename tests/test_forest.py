@@ -1,4 +1,4 @@
-from random import randrange
+import random
 
 import pytest
 import yaml
@@ -32,18 +32,20 @@ def test_tiles(forest):
     assert len(forest.tiles) == forest.xdim * forest.ydim
 
 
-def test_find_tile_by_xy(forest):
-    rx = randrange(0, forest.xdim)
-    ry = randrange(0, forest.ydim)
-    tile = forest.find_tile_by_xy(rx, ry)
+def test_find_tile(forest):
+    random.seed(0)
+    rx = random.randrange(0, forest.xdim)
+    ry = random.randrange(0, forest.ydim)
+    tile = forest.find_tile(rx, ry)
     assert tile.x == rx and tile.y == ry
 
 
-@pytest.mark.parametrize("radius", [0, 1, 2, 5, 5.5, 6])
-def test_find_tiles_by_radius(forest, fcfg, radius):
-    test_x = round(fcfg["xdim"] / 2)
-    test_y = round(fcfg["ydim"] / 2)
-    test_tile = forest.find_tile_by_xy(test_x, test_y)
+@pytest.mark.parametrize("seed", [0, 1, 5, 10])
+def test_find_tiles_by_radius(forest, fcfg, seed):
+    random.seed(seed)
+
+    test_tile = forest._tree_tiles[random.randrange(0, len(forest.tree_tiles))]
+    radius = test_tile.tree.radius
 
     subject_tiles = forest.find_tiles_by_radius(test_tile, radius)
 

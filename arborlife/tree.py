@@ -23,5 +23,14 @@ class Tree:
             a, b = (clip_a - mean) / std, (clip_b - mean) / std
             return truncnorm.rvs(a=a, b=b, loc=mean, scale=std)
 
+        def compute_starting_radius(age):
+            # Uses truncnorm (versus norm) to bracket starting tree radius range
+            # 10 y/o has r mean 4, sd 1. +/- 1 per year from 10 y/o mean, min mean 2.
+            mean, std = max(2, age - 6), 1
+            clip_a, clip_b = 2, tcfg["age_init_max"] - 6
+            a, b = (clip_a - mean) / std, (clip_b - mean) / std
+            return truncnorm.rvs(a=a, b=b, loc=mean, scale=std)
+
         self.age = compute_starting_age()
+        self.radius = compute_starting_radius(self.age)
         self.alive = tcfg["alive"]

@@ -52,7 +52,7 @@ class Forest:
     def tiles(self):
         return self._tiles
 
-    def find_tile_by_xy(self, x, y):
+    def find_tile(self, x, y):
         """Finds and returns the forest tile at the specified x/y location."""
         return self._tiles[x * self._xdim + y]
 
@@ -70,7 +70,7 @@ class Forest:
         # Iterate over bounding box collecting tiles w/in radius of center
         for x in range(x_origin, x_extent):
             for y in range(y_origin, y_extent):
-                test_tile = self.find_tile_by_xy(x, y)
+                test_tile = self.find_tile(x, y)
                 if test_tile.find_distance(center_tile) <= radius:
                     tiles_by_radius.append(test_tile)
 

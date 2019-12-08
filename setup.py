@@ -1,8 +1,12 @@
 from setuptools import setup, find_packages
 
+version = {}
+with open('arborlife/version.py') as fp:
+    exec(fp.read(), version)
+
 setup(
     name="arborlife",
-    version="0.1.0",
+    version=version["__version__"],
     description="Python implementation of Arbor Life simulation.",
     url="https://github.com/rogerhurwitz/arborlife",
     author="Roger Hurwitz",
