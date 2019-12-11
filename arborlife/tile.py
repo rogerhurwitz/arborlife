@@ -1,28 +1,31 @@
-from math import hypot
-
-from arborlife import Soil
+import math
+import arborlife as al
 
 
 class Tile:
-    """The smallest addressable unit within a forest.
+    """The lowest level addressable container within a forest.
 
     Tiles are created in the process of creating the Forest and represent an
-    x/y grid location within the Forest.  Furthermore, tiles are containers
-    for entities that reside in the forest at the specified location such as an
-    instance of Soil and (possibly) an instance of Tree.
+    x/y grid location within it.  Furthermore, tiles are containers for
+    entities within the forest at the specified location such as an instance of
+    Soil and (possibly) an instance of Tree.
 
     Attributes:
-        soil (Soil): Common denominator for all tiles.  Defaults to Soil().
-        tree (Tree): May or may not be present within a tile.  Defaults to None.
-        x, y (ints): Coordinate location within a forest.  Each defaults to 0.
+        x, y (int): Coordinate location of a tile within the forest.
+        tree (Tree): A tree may or may not be present within a tile.
     """
 
-    def __init__(self, soil=None, tree=None, x=0, y=0):
-        self.soil = soil if soil else Soil()
-        self.tree = tree
+    def __init__(self, x, y, tree=None):
         self.x = x
         self.y = y
+        self.tree = tree
+        self.soil = al.Soil()
 
-    def find_distance(self, other):
-        """Finds the distance between this tile and another tile in the forest"""
-        return hypot(self.x - other.x, self.y - other.y)
+    def find_distance(self, other, math_hypot=math.hypot):
+        """Finds the distance between this tile and another tile in the forest.
+
+        Args:
+            other (Tile): The tile to which the distance is to be measured.
+            math_hypot (function): Ignore: for lookup optimization purposes.
+        """
+        return math_hypot(self.x - other.x, self.y - other.y)

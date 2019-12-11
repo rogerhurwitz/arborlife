@@ -24,7 +24,7 @@ class Forest:
         self._tree_tiles = []
 
         self._tiles = [
-            al.Tile(x=x, y=y) for x in range(self.xdim) for y in range(self.ydim)
+            al.Tile(x, y) for x in range(self.xdim) for y in range(self.ydim)
         ]
         # Using specified initial tree density, populate forest with trees
         for tile in self._tiles:
