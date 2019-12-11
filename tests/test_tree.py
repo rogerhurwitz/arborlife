@@ -14,10 +14,9 @@ def tcfg():
 
 def test_init_age(tcfg):
     tree_ages = [Tree().age for _ in range(1000)]
-    assert (
-        min(tree_ages) >= tcfg["age_init_min"]
-        and max(tree_ages) <= tcfg["age_init_max"])
+    assert tcfg["age_init_min"] is None or min(tree_ages) >= tcfg["age_init_min"]
+    assert tcfg["age_init_max"] is None or max(tree_ages) <= tcfg["age_init_max"]
 
 
 def test_init_alive(tcfg):
-    assert Tree().alive == tcfg["alive"]
+    assert Tree().alive

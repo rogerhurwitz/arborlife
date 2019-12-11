@@ -27,7 +27,7 @@ class Soil:
     def soil_moisture(self):
         """float: Available moisture in soil on a scale between 0.0 and 10.0"""
 
-        # Calculated from moisture_ft3 to avoid synchronization overhead
+        # Calculated from moisture_ft3 to avoid synchronization complexity
         return Soil.FIELD_CAPACITY * (self._moisture_ft3 / self._max_moisture_ft3)
 
     @soil_moisture.setter

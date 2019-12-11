@@ -45,7 +45,7 @@ def test_find_tiles_by_radius(forest, fcfg, seed):
     random.seed(seed)
 
     test_tile = forest._tree_tiles[random.randrange(0, len(forest.tree_tiles))]
-    radius = test_tile.tree.radius
+    radius = random.randrange(1, 10)
 
     subject_tiles = forest.find_tiles_by_radius(test_tile, radius)
 

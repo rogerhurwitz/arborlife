@@ -1,5 +1,7 @@
-from arborlife.config import cfg
-from scipy.stats import truncnorm
+import numpy as np
+from scipy import stats
+
+from arborlife import config
 
 
 class Tree:
@@ -11,26 +13,26 @@ class Tree:
             arborlife.yml config file.
         alive (bool): True if tree is alive else false.  Initial state of
             tree set with tree alive value in arborlife.yml
+        canopy_mass (float): TBD
     """
 
     def __init__(self):
-        tcfg = cfg["tree"]
+        tree_cfg = config.cfg["tree"]
 
-        def compute_starting_age():
-            # Uses truncnorm (versus norm) to bracket starting tree age range
-            clip_a, clip_b = tcfg["age_init_min"], tcfg["age_init_max"]
-            mean, std = tcfg["age_init_mean"], tcfg["age_init_std"]
-            a, b = (clip_a - mean) / std, (clip_b - mean) / std
-            return truncnorm.rvs(a=a, b=b, loc=mean, scale=std)
+        self.age = self._calc_initial_age(
+            tree_cfg["age_init_min"],
+            tree_cfg["age_init_max"],
+            tree_cfg["age_init_mean"],
+            tree_cfg["age_init_sd"],
+        )
+        # 10 y/o tree canopy mass = 60kg, +/- 50kg each year away, min 10kg
+        self.canopy_mass = max(10, 50 * self.age - 440)
+        self.alive = True
 
-        def compute_starting_radius(age):
-            # Uses truncnorm (versus norm) to bracket starting tree radius range
-            # 10 y/o has r mean 4, sd 1. +/- 1 per year from 10 y/o mean, min mean 2.
-            mean, std = max(2, age - 6), 1
-            clip_a, clip_b = 2, tcfg["age_init_max"] - 6
-            a, b = (clip_a - mean) / std, (clip_b - mean) / std
-            return truncnorm.rvs(a=a, b=b, loc=mean, scale=std)
-
-        self.age = compute_starting_age()
-        self.radius = compute_starting_radius(self.age)
-        self.alive = tcfg["alive"]
+    def _calc_initial_age(self, min_age, max_age, mean, sd):
+        # https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.truncnorm.html
+        clip_b = np.inf if max_age is None else max_age
+        clip_a = -np.inf if min_age is None else min_age
+        return stats.truncnorm.rvs(
+            a=(clip_a - mean) / sd, b=(clip_b - mean) / sd, loc=mean, scale=sd
+        )

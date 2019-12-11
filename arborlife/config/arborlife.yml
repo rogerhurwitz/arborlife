@@ -5,9 +5,9 @@
 tree:
   # To set starting tree age using a truncated normal distribution
   age_init_mean: 10
-  age_init_std: 4
-  age_init_min: 1
-  age_init_max: 100
+  age_init_sd: 4
+  age_init_min: 9
+  age_init_max: null
   # Whether a tree starts out as alive or dead
   alive: True
 

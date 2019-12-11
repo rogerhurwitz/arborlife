@@ -1,5 +1,5 @@
 import math
-import arborlife as al
+import arborlife
 
 
 class Tile:
@@ -12,20 +12,21 @@ class Tile:
 
     Attributes:
         x, y (int): Coordinate location of a tile within the forest.
+        soil (Soil): Will be created if not specified by caller.
         tree (Tree): A tree may or may not be present within a tile.
     """
 
-    def __init__(self, x, y, tree=None):
+    def __init__(self, x, y, soil=None, tree=None):
         self.x = x
         self.y = y
         self.tree = tree
-        self.soil = al.Soil()
+        self.soil = soil if soil is not None else arborlife.Soil()
 
     def find_distance(self, other, math_hypot=math.hypot):
         """Finds the distance between this tile and another tile in the forest.
 
         Args:
             other (Tile): The tile to which the distance is to be measured.
-            math_hypot (function): Ignore: for lookup optimization purposes.
+            math_hypot (function): Ignore: this is for optimization purposes.
         """
         return math_hypot(self.x - other.x, self.y - other.y)
