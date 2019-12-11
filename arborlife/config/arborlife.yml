@@ -7,9 +7,8 @@ tree:
   age_init_mean: 10
   age_init_sd: 4
   age_init_min: 9
+  # if age_init_max is null then it assumed to be infinite
   age_init_max: null
-  # Whether a tree starts out as alive or dead
-  alive: True
 
 forest:
   # Extent of x and y dimensions of forest cell grid
