@@ -6,6 +6,9 @@ class Soil:
     MAX_MOISTURE_FT3 = 1.18 * 10e26
     """float: Default maximum moisture capacity of soil in molecules"""
 
+    RAIN_INCH_FT3 = 7.89 * 10e25
+    """"""
+
     FIELD_CAPACITY = 10
     """int: Maximum moisture capacity of soil on a 0 to 10 scale"""
 

@@ -2,13 +2,24 @@ from arborlife import Tile, Soil, Tree
 
 
 def test_default_init():
-    t = Tile()
-    assert isinstance(t.soil, Soil) and not t.tree and t.x == 0 and t.y == 0
+    tile = Tile()
+
+    assert not tile.tree
+    assert isinstance(tile.soil, Soil)
+    assert tile.x == 0
+    assert tile.y == 0
 
 
 def test_specified_init():
-    t = Tile(None, Tree(), 1, 2)
-    assert isinstance(t.tree, Tree) and not t.soil and t.x == 1 and t.y == 2
+    tree = Tree()
+    soil = Soil()
+
+    tile = Tile(soil, tree, x=1, y=2)
+
+    assert tile.tree is tree
+    assert tile.soil is soil
+    assert tile.x == 1
+    assert tile.y == 2
 
 
 def test_find_distance():

@@ -1,5 +1,6 @@
-from arborlife import Soil
 from math import hypot
+
+from arborlife import Soil
 
 
 class Tile:
@@ -16,14 +17,12 @@ class Tile:
         x, y (ints): Coordinate location within a forest.  Each defaults to 0.
     """
 
-    def __init__(self, soil=Soil(), tree=None, x=0, y=0):
-        self.soil = soil
+    def __init__(self, soil=None, tree=None, x=0, y=0):
+        self.soil = soil if soil else Soil()
         self.tree = tree
         self.x = x
         self.y = y
 
     def find_distance(self, other):
         """Finds the distance between this tile and another tile in the forest"""
-        dx = self.x - other.x
-        dy = self.y - other.y
-        return hypot(dx, dy)
+        return hypot(self.x - other.x, self.y - other.y)

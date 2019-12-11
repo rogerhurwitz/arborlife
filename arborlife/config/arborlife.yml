@@ -17,3 +17,8 @@ forest:
   ydim: 100
   # Initial percentage of cells in forest with trees
   density_init: .60
+
+simengine:
+  tick_ms: 0
+  ticks_finite: True
+  tick_max: 100
