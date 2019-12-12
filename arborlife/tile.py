@@ -20,6 +20,7 @@ class Tile:
         self.x = x
         self.y = y
         self.tree = tree
+        # Unlike tree, soil is a required by tile
         self.soil = soil if soil is not None else arborlife.Soil()
 
     def find_distance(self, other, math_hypot=math.hypot):
@@ -27,6 +28,6 @@ class Tile:
 
         Args:
             other (Tile): The tile to which the distance is to be measured.
-            math_hypot (function): Ignore: this is for optimization purposes.
+            math_hypot (function): Ignore: this is solely a namespace optimization.
         """
         return math_hypot(self.x - other.x, self.y - other.y)
