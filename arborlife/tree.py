@@ -13,6 +13,7 @@ DBH_H_EXPONENT = 0.92045
 HEIGHT_WIDTH_RATIO = 0.9
 MAX_LEAF_CANOPY_PCT = 0.2
 ROOT_CANOPY_PCT_MEAN = 0.60
+ROOT_CANOPY_PCT = 0.62
 WOOD_DENSITY_LB = 45.0
 
 
@@ -69,7 +70,7 @@ class Tree:
 
     @property
     def root_mass(self):
-        return ROOT_CANOPY_PCT_MEAN * self.canopy_mass
+        return ROOT_CANOPY_PCT * self.canopy_mass
 
     @property
     def root_radius(self):
