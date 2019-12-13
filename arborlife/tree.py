@@ -22,14 +22,16 @@ class Tree:
         canopy_mass (float): TBD
     """
 
-    def __init__(self):
+    def __init__(self, age=None):
         tree_cfg = config.cfg["tree"]
 
-        self.age = self._calc_initial_age(
-            tree_cfg["age_init_min"],
-            tree_cfg["age_init_max"],
-            tree_cfg["age_init_mean"],
-            tree_cfg["age_init_sd"],
+        self.age = age if age is not None else (
+            self._calc_initial_age(
+                tree_cfg["age_init_min"],
+                tree_cfg["age_init_max"],
+                tree_cfg["age_init_mean"],
+                tree_cfg["age_init_sd"],
+            )
         )
         self._height_max = 0
         # 10 y/o tree canopy mass = 60kg, +/- 50kg each year away, min 10kg
