@@ -4,7 +4,7 @@ arborlife
 =========
 
 arborlife is an open source forest-centric simulation library intended for use
-by educators and studuents, or anyone else for that matter with an interest in
+by educators and students, or anyone else for that matter with an interest in
 tree-stuff.  The goal is to model the real-life processes associated with
 forests accurately enough to be educational, and perhaps even fun.  The
 theoretical foundation for arborlife comes from the work of Neil Hurwitz.
