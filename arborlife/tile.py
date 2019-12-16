@@ -1,5 +1,7 @@
+import logging
 import math
-import arborlife
+
+log = logging.getLogger(__name__)
 
 
 class Tile:
@@ -16,12 +18,11 @@ class Tile:
         tree (Tree): A tree may or may not be present within a tile.
     """
 
-    def __init__(self, x, y, soil=None, tree=None):
+    def __init__(self, x, y, soil, tree=None):
         self.x = x
         self.y = y
+        self.soil = soil
         self.tree = tree
-        # Unlike tree, soil is a required by tile
-        self.soil = soil if soil is not None else arborlife.Soil()
 
     def find_distance(self, other, math_hypot=math.hypot):
         """Finds the distance between this tile and another tile in the forest.

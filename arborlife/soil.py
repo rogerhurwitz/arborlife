@@ -1,3 +1,6 @@
+import logging
+
+log = logging.getLogger(__name__)
 
 
 class Soil:
@@ -14,14 +17,14 @@ class Soil:
 
     def __init__(self, max_moisture_ft3=MAX_MOISTURE_FT3):
 
-        # Clamp max_moisture_ft3 between boundary values if out of range
         if max_moisture_ft3 < 0 or max_moisture_ft3 > Soil.MAX_MOISTURE_FT3:
-            max_moisture_ft3 = max(0, min(max_moisture_ft3, Soil.MAX_MOISTURE_FT3))
+            log.warning(f"soil.__init__ called w/ out of bounds value: {max_moisture_ft3}")
 
-        self._max_moisture_ft3 = max_moisture_ft3
+        # Clamp max_moisture_ft3 between boundary values if out of range
+        self._max_moisture_ft3 = max(0, min(max_moisture_ft3, Soil.MAX_MOISTURE_FT3))
 
         # Available moisture is assumed to be at maximum initially
-        self._moisture_ft3 = max_moisture_ft3
+        self._moisture_ft3 = self._max_moisture_ft3
 
     @property
     def soil_moisture(self):
@@ -35,6 +38,7 @@ class Soil:
 
         # Clamp value between boundary values if out of range
         if new_sm < 0 or new_sm > Soil.FIELD_CAPACITY:
+            log.warning(f"soil_moisture.setter called w/ out of bounds value: {new_sm}")
             new_sm = max(0, min(new_sm, Soil.FIELD_CAPACITY))
 
         # Changes _moisture_ft3 then used by soil_moisture property getter
@@ -48,8 +52,8 @@ class Soil:
     @moisture_ft3.setter
     def moisture_ft3(self, new_m_ft3):
 
-        # Clamp value between boundary values if out of range
         if new_m_ft3 > self._max_moisture_ft3 or new_m_ft3 < 0:
-            new_m_ft3 = max(0, min(new_m_ft3, self._max_moisture_ft3))
+            log.warning(f"moisture_ft3.setter called w/ out of bounds value: {new_m_ft3}")
 
-        self._moisture_ft3 = new_m_ft3
+        # Clamp value between boundary values if out of range
+        self._moisture_ft3 = max(0, min(new_m_ft3, self._max_moisture_ft3))
