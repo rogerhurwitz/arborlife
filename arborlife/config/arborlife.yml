@@ -11,12 +11,13 @@ tree:
 
 forest:
   # Extent of x and y dimensions of forest cell grid
-  xdim: 100
-  ydim: 100
+  xdim: 500
+  ydim: 500
   # Initial percentage of cells in forest with trees
-  density_init: .60
+  density_init: .01
 
 simengine:
-  tick_ms: 0
-  ticks_finite: True
-  tick_max: 100
+  # Maximum number of years to run the simulation
+  begin_date: "2019-12-01"
+  finish_date: "2020-03-01"
+  # finish_date: "2038-12-31"

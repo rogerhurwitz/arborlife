@@ -84,6 +84,10 @@ class Tree:
     def root_ft3(self):
         return self.root_mass / WOOD_DENSITY_LB
 
+    @property
+    def glucose_store(self):
+        return self.canopy_mass * 1.85e25
+
     # @property
     # def canopy_mass(self):
     #     return utils.calc_truncnorm(
