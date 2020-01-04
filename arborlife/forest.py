@@ -5,7 +5,7 @@ import random
 import arborlife
 from arborlife import config
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Forest:
@@ -22,22 +22,27 @@ class Forest:
     def __init__(self):
         """Creates forest using arborlife.yml forest initialization parameters."""
         cfg = config.get_cfg("forest")
+        density_init = cfg["density_init"]
+
         self._xdim = cfg["xdim"]
         self._ydim = cfg["ydim"]
-        self._density = cfg["density_init"]
         self._tiles, self._tree_tiles = [], []
+
+        logger.debug(f"xdim: {self._xdim}, ydim: {self._ydim}")
 
         for x in range(self.xdim):
             for y in range(self.ydim):
 
                 # Not every tile in the forest has a tree
-                tree = arborlife.Tree() if random.random() <= self._density else None
+                tree = arborlife.Tree() if random.random() <= density_init else None
 
                 tile = arborlife.Tile(x, y, arborlife.Soil(), tree)
                 self._tiles.append(tile)
 
                 if tree is not None:
                     self._tree_tiles.append(tile)
+
+        logger.debug(f"tree tiles: {len(self._tree_tiles)}, density: {self.density}")
 
     @property
     def xdim(self):
@@ -63,7 +68,7 @@ class Forest:
 
         # No point clamping if invalid coordinate(s)
         if x < 0 or x >= self._xdim or y < 0 or y >= self._ydim:
-            log.error(f"find_tile called w/ out of bounds value: (x={x}, y={y})")
+            logger.error(f"find_tile called w/ out of bounds value: (x={x}, y={y})")
             raise(ValueError)
 
         """Finds and returns the forest tile at the specified x/y location."""

@@ -1,4 +1,4 @@
-# import logging
+import logging
 
 import yaml
 from pkg_resources import resource_filename
@@ -17,6 +17,7 @@ def get_cfg(section=None):
             _cfg = yaml.safe_load(ymlfile)
 
         # Package-level logging initialization
-        # logging.basicConfig(level=cfg["logging"]["level"])
+        # logging.basicConfig(level=_cfg["logging"]["level"])
+        logging.basicConfig(level=logging.DEBUG)
 
     return _cfg if section is None else _cfg[section]

@@ -1,8 +1,11 @@
 import enum
+import logging
 import sys
 from datetime import datetime, timedelta
 
-from arborlife import observer, config
+from arborlife import config, observer
+
+logger = logging.getLogger(__name__)
 
 ONE_HOUR = timedelta(hours=1)
 
@@ -26,12 +29,15 @@ class EventLoop(observer.Subject):
     def __init__(self):
         super().__init__()
 
+        cfg = config.get_cfg("eventloop")
         try:
-            scfg = config.get_cfg("eventloop")
-            self.current_dtime = datetime.fromisoformat(scfg["begin_date"])
-            self.finish_dtime = datetime.fromisoformat(scfg["finish_date"])
+            self.current_dtime = datetime.fromisoformat(cfg["begin_date"])
+            self.finish_dtime = datetime.fromisoformat(cfg["finish_date"])
         except ValueError as error:
             sys.exit(error)
+        else:
+            logger.debug(f"begin_date: {self.current_dtime}")
+            logger.debug(f"finish_date: {self.finish_dtime}")
 
     def run(self):
         """Execute event loop for simulation.
