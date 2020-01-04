@@ -16,7 +16,7 @@ forest:
   # Initial percentage of cells in forest with trees
   density_init: .01
 
-simengine:
+eventloop:
   # Maximum number of years to run the simulation
   begin_date: "2019-12-01"
   finish_date: "2020-03-01"

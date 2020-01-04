@@ -1,23 +1,24 @@
 import enum
+import sys
 from datetime import datetime, timedelta
 
-# from arborlife.config import cfg
+from arborlife import observer
 import arborlife
 
-scfg = arborlife.config.cfg["simengine"]
+scfg = arborlife.config.cfg["eventloop"]
 
 ONE_HOUR = timedelta(hours=1)
 
 
 class Events(enum.Enum):
-    EOD = 1
-    EOW = 2
-    EOM = 3
-    EOY = 4
-    EOH = 5
+    EOH = enum.auto()
+    EOD = enum.auto()
+    EOW = enum.auto()
+    EOM = enum.auto()
+    EOY = enum.auto()
 
 
-class EventLoop(arborlife.Subject):
+class EventLoop(observer.Subject):
     """Regulates the passage of time within the simulation.
 
     A subclass of Subject, EventLoop manages the passage of time within the
@@ -27,8 +28,12 @@ class EventLoop(arborlife.Subject):
 
     def __init__(self):
         super().__init__()
-        self.current_dtime = datetime.fromisoformat(scfg["begin_date"])
-        self.finish_dtime = datetime.fromisoformat(scfg["finish_date"])
+
+        try:
+            self.current_dtime = datetime.fromisoformat(scfg["begin_date"])
+            self.finish_dtime = datetime.fromisoformat(scfg["finish_date"])
+        except ValueError as error:
+            sys.exit(error)
 
     def run(self):
         """Execute event loop for simulation.
@@ -46,9 +51,10 @@ class EventLoop(arborlife.Subject):
                 self.subject_state = event
 
     def _events(self, dtime):
-        """A generator that produces zero or more events depending on the dtime.
+        """A generator producing zero or more time events depending on the dtime.
 
-        jdfdfd
+        Picks apart the dtime and yields one event for each milestone associated
+        with that particular datetime object.
         """
         # End of day if it just turned midnight
         if dtime.hour == 0:
