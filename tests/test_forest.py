@@ -1,3 +1,4 @@
+import math
 import random
 
 import pytest
@@ -7,11 +8,12 @@ from pkg_resources import resource_filename
 from arborlife import Forest
 
 
+# Instantiating a Forest is expensive, so do it once for module
 @pytest.fixture(scope="module")
 def forest():
     return Forest()
 
-
+# Avoid reading/parsing YAML file more than once
 @pytest.fixture(scope="module")
 def fcfg():
     ymlfilename = resource_filename("arborlife", "config/arborlife.yml")
@@ -24,20 +26,37 @@ def test_default_init(forest, fcfg):
 
 
 def test_density(forest):
-    tree_count = sum(1 for tile in forest._tree_tiles if tile.tree.alive)
-    assert forest.density == tree_count / (forest.xdim * forest.ydim)
+    assert forest.density == len(forest.tree_tiles) / (forest.xdim * forest.ydim)
 
 
-def test_tiles(forest):
+def test_total_tiles(forest):
     assert len(forest.tiles) == forest.xdim * forest.ydim
 
 
-def test_find_tile(forest):
+def test_find_tile_random(forest):
     random.seed(0)
-    rx = random.randrange(0, forest.xdim)
-    ry = random.randrange(0, forest.ydim)
-    tile = forest.find_tile(rx, ry)
-    assert tile.x == rx and tile.y == ry
+    x = random.randrange(0, forest.xdim)
+    y = random.randrange(0, forest.ydim)
+    tile = forest.find_tile(x, y)
+    assert tile.x == x and tile.y == y
+
+
+def test_find_tile_min(forest):
+    x, y = 0, 0
+    tile = forest.find_tile(x, y)
+    assert tile.x == x and tile.y == y
+
+
+def test_find_tile_max(forest):
+    x, y = forest.xdim - 1, forest.ydim - 1
+    tile = forest.find_tile(x, y)
+    assert tile.x == x and tile.y == y
+
+
+@pytest.mark.parametrize("x,y", [(-1, 0), (0, -1), (math.inf, 0), (0, math.inf)])
+def test_find_tile_oob(forest, x, y):
+    with pytest.raises(ValueError):
+        forest.find_tile(x, y)
 
 
 @pytest.mark.parametrize("seed", [0, 1, 5, 10])

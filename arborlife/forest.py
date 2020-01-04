@@ -1,8 +1,11 @@
+import logging
 import math
-from random import random
+import random
 
-import arborlife as al
+import arborlife
 import arborlife.config as config
+
+log = logging.getLogger(__name__)
 
 
 class Forest:
@@ -21,16 +24,19 @@ class Forest:
         self._xdim = config.cfg["forest"]["xdim"]
         self._ydim = config.cfg["forest"]["ydim"]
         self._density = config.cfg["forest"]["density_init"]
-        self._tree_tiles = []
+        self._tiles, self._tree_tiles = [], []
 
-        self._tiles = [
-            al.Tile(x, y) for x in range(self.xdim) for y in range(self.ydim)
-        ]
-        # Using specified initial tree density, populate forest with trees
-        for tile in self._tiles:
-            if random() <= self._density:
-                tile.tree = al.Tree()
-                self._tree_tiles.append(tile)
+        for x in range(self.xdim):
+            for y in range(self.ydim):
+
+                # Not every tile in the forest has a tree
+                tree = arborlife.Tree() if random.random() <= self._density else None
+
+                tile = arborlife.Tile(x, y, arborlife.Soil(), tree)
+                self._tiles.append(tile)
+
+                if tree is not None:
+                    self._tree_tiles.append(tile)
 
     @property
     def xdim(self):
@@ -53,6 +59,12 @@ class Forest:
         return self._tiles
 
     def find_tile(self, x, y):
+
+        # No point clamping if invalid coordinate(s)
+        if x < 0 or x >= self._xdim or y < 0 or y >= self._ydim:
+            log.error(f"find_tile called w/ out of bounds value: (x={x}, y={y})")
+            raise(ValueError)
+
         """Finds and returns the forest tile at the specified x/y location."""
         return self._tiles[x * self._xdim + y]
 

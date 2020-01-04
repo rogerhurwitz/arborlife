@@ -41,8 +41,11 @@ class Tree:
         )
         # Trees don't shrink, but mass can, so need track max height
         self._height_max = 0
+
+        # TODO: Need fxn to calculate canopy_mass steady state
         # 10 y/o tree canopy mass = 60kg, +/- 50kg each year away, min 10kg
         self.canopy_mass = max(10, 50 * self.age - 440)
+        
         self.alive = True
 
     @property
