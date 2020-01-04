@@ -5,7 +5,7 @@ import pytest
 import yaml
 from pkg_resources import resource_filename
 
-from arborlife import Forest
+from arborlife.forest import Forest
 
 
 # Instantiating a Forest is expensive, so do it once for module

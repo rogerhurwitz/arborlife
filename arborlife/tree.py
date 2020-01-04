@@ -29,7 +29,7 @@ class Tree:
     """
 
     def __init__(self, age=None):
-        tree_cfg = config.cfg["tree"]
+        tree_cfg = config.get_cfg("tree")
 
         self.age = float(age) if age is not None else (
             utils.calc_truncnorm(
@@ -45,7 +45,7 @@ class Tree:
         # TODO: Need fxn to calculate canopy_mass steady state
         # 10 y/o tree canopy mass = 60kg, +/- 50kg each year away, min 10kg
         self.canopy_mass = max(10, 50 * self.age - 440)
-        
+
         self.alive = True
 
     @property

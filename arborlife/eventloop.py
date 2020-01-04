@@ -2,10 +2,7 @@ import enum
 import sys
 from datetime import datetime, timedelta
 
-from arborlife import observer
-import arborlife
-
-scfg = arborlife.config.cfg["eventloop"]
+from arborlife import observer, config
 
 ONE_HOUR = timedelta(hours=1)
 
@@ -30,6 +27,7 @@ class EventLoop(observer.Subject):
         super().__init__()
 
         try:
+            scfg = config.get_cfg("eventloop")
             self.current_dtime = datetime.fromisoformat(scfg["begin_date"])
             self.finish_dtime = datetime.fromisoformat(scfg["finish_date"])
         except ValueError as error:

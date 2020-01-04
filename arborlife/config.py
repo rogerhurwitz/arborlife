@@ -1,17 +1,22 @@
-import logging
+# import logging
 
 import yaml
 from pkg_resources import resource_filename
 
+_cfg = None
 
-def initialize_package():
 
-    global cfg
+def get_cfg(section=None):
 
-    # TODO: Remove hard-coding, add error checking
-    ymlfilename = resource_filename("arborlife", "config/arborlife.yml")
-    with open(ymlfilename) as ymlfile:
-        cfg = yaml.safe_load(ymlfile)
+    global _cfg
 
-    # Package-level logging initialization
-    logging.basicConfig(level=cfg["logging"]["level"])
+    if _cfg is None:
+
+        ymlfilename = resource_filename("arborlife", "config/arborlife.yml")
+        with open(ymlfilename) as ymlfile:
+            _cfg = yaml.safe_load(ymlfile)
+
+        # Package-level logging initialization
+        # logging.basicConfig(level=cfg["logging"]["level"])
+
+    return _cfg if section is None else _cfg[section]

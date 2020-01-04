@@ -3,7 +3,7 @@ import math
 import random
 
 import arborlife
-import arborlife.config as config
+from arborlife import config
 
 log = logging.getLogger(__name__)
 
@@ -21,9 +21,10 @@ class Forest:
 
     def __init__(self):
         """Creates forest using arborlife.yml forest initialization parameters."""
-        self._xdim = config.cfg["forest"]["xdim"]
-        self._ydim = config.cfg["forest"]["ydim"]
-        self._density = config.cfg["forest"]["density_init"]
+        cfg = config.get_cfg("forest")
+        self._xdim = cfg["xdim"]
+        self._ydim = cfg["ydim"]
+        self._density = cfg["density_init"]
         self._tiles, self._tree_tiles = [], []
 
         for x in range(self.xdim):

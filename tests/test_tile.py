@@ -1,4 +1,5 @@
-from arborlife import Tile, Soil
+from arborlife.tile import Tile
+from arborlife.soil import Soil
 
 
 def test_default_init():
