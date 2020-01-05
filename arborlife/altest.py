@@ -1,4 +1,5 @@
 import arborlife
+from arborlife.eventloop import Event
 
 
 class Arbor(arborlife.Observer):
@@ -7,9 +8,9 @@ class Arbor(arborlife.Observer):
         super().__init__()
         sim.attach(self)
 
-    def update(self, arg):
-        if arg == arborlife.eventloop.Events.EOY:
-            print(self._subject.current_dtime, arg.name)
+    def update(self, epoch):
+        if epoch.event == Event.EOM:
+            print(epoch.dtime, epoch.event.name)
 
 
 forest = arborlife.Forest()
